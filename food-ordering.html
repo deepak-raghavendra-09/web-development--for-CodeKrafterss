@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tiffin Stop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+
+    --ink: #2B1B12;
+    --paper: #FBF0D9;
+    --card: #FFFDF7;
+    --red: #C1442D;
+    --red-dark: #9A3521;
+    --mustard: #E2A63B;
+    --teal: #2F6F62;
+    --line: #D8C79C;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ink: #F3E9D8;
+      --paper: #221A13;
+      --card: #2C2219;
+      --red: #E2664A;
+      --red-dark: #C1442D;
+      --mustard: #E9B85C;
+      --teal: #4C9384;
+      --line: #4A3B28;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ink: #F3E9D8;
+    --paper: #221A13;
+    --card: #2C2219;
+    --red: #E2664A;
+    --red-dark: #C1442D;
+    --mustard: #E9B85C;
+    --teal: #4C9384;
+    --line: #4A3B28;
+  }
+
+  html {
+    scroll-padding-top: env(safe-area-inset-top, 0px);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Work Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wordmark {
+    font-family: 'Bungee', sans-serif;
+    letter-spacing: 0.5px;
+  }
+
+  /* ---------- Header / banner ---------- */
+
+  .banner {
+    background: var(--red);
+    color: #FFF8EC;
+    padding: env(safe-area-inset-top, 0px) 24px 46px;
+    text-align: center;
+    position: relative;
+  }
+
+  .banner .top-space { height: 22px; }
+
+  .banner h1 {
+    font-size: clamp(2rem, 6vw, 3rem);
+    margin: 0 0 6px;
+  }
+
+  .banner p {
+    margin: 0;
+    font-size: 1rem;
+    opacity: 0.9;
+    max-width: 34ch;
+    margin-inline: auto;
+  }
+
+  /* the scalloped awning edge under the banner */
+  .scallop {
+    height: 22px;
+    background-image: radial-gradient(circle at 11px 0, transparent 11px, var(--red) 11.5px);
+    background-size: 22px 22px;
+    background-repeat: repeat-x;
+    margin-top: -1px;
+  }
+
+  /* ---------- Category tabs ---------- */
+
+  .tabs {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 26px 16px 6px;
+  }
+
+  .tab {
+    font-family: 'Work Sans', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 9px 18px;
+    border: 2px solid var(--ink);
+    background: var(--card);
+    color: var(--ink);
+    border-radius: 999px;
+    cursor: pointer;
+  }
+
+  .tab.active {
+    background: var(--mustard);
+    border-color: var(--mustard);
+  }
+
+  /* ---------- Menu grid ---------- */
+
+  .menu {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 240px));
+    justify-content: center;
+    gap: 22px;
+    padding: 24px 16px 8px;
+    max-width: 1080px;
+    margin-inline: auto;
+  }
+
+  .food-card {
+    background: var(--card);
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .food-card .icon-plate {
+    position: relative;
+    height: 132px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--paper);
+  }
+
+  .food-card .icon-plate svg {
+    width: 74px;
+    height: 74px;
+  }
+
+  .price-stamp {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--teal);
+    color: #FFF8EC;
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 5px 9px;
+    border-radius: 999px;
+    transform: rotate(4deg);
+  }
+
+  /* the little perforation line, like a ticket stub */
+  .perforation {
+    height: 0;
+    border-top: 2px dashed var(--line);
+    margin: 0 14px;
+  }
+
+  .food-card .details {
+    padding: 14px 16px 16px;
+    text-align: left;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .food-card h3 {
+    margin: 0 0 4px;
+    font-size: 1.05rem;
+  }
+
+  .food-card p.desc {
+    margin: 0 0 12px;
+    font-size: 0.88rem;
+    opacity: 0.75;
+    flex: 1;
+  }
+
+  .add-btn {
+    align-self: flex-start;
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    font-family: 'Work Sans', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 9px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  .add-btn:hover { background: var(--teal); }
+
+  /* ---------- Cart / receipt ---------- */
+
+  .receipt-wrap {
+    display: flex;
+    justify-content: center;
+    padding: 34px 16px 50px;
+  }
+
+  .receipt {
+    background: var(--card);
+    width: 100%;
+    max-width: 360px;
+    padding: 24px 22px 18px;
+    border-top: 3px dashed var(--line);
+    position: relative;
+  }
+
+  /* torn paper look along the bottom of the receipt */
+  .receipt::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -12px;
+    height: 12px;
+    background: linear-gradient(-45deg, var(--card) 6px, transparent 0),
+                linear-gradient(45deg, var(--card) 6px, transparent 0);
+    background-size: 12px 12px;
+    background-repeat: repeat-x;
+  }
+
+  .receipt h2 {
+    font-family: 'Work Sans', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    text-align: center;
+    margin: 0 0 4px;
+  }
+
+  .receipt .sub {
+    text-align: center;
+    font-size: 0.78rem;
+    opacity: 0.6;
+    margin: 0 0 16px;
+  }
+
+  .empty-note {
+    text-align: center;
+    font-size: 0.9rem;
+    opacity: 0.65;
+    margin: 20px 0;
+  }
+
+  .receipt-line {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    font-size: 0.88rem;
+    padding: 6px 0;
+  }
+
+  .receipt-line .item-name { white-space: nowrap; }
+  .receipt-line .qty { opacity: 0.6; font-size: 0.8em; }
+
+  .receipt-line .dots {
+    flex: 1;
+    border-bottom: 1px dotted var(--line);
+    transform: translateY(-4px);
+  }
+
+  .receipt-line .item-price { white-space: nowrap; font-weight: 600; }
+
+  .remove-btn {
+    border: 1px solid var(--line);
+    background: none;
+    color: var(--ink);
+    width: 20px;
+    height: 20px;
+    line-height: 1;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 0.85rem;
+    padding: 0;
+  }
+
+  .receipt-total {
+    display: flex;
+    justify-content: space-between;
+    border-top: 2px solid var(--ink);
+    margin-top: 10px;
+    padding-top: 10px;
+    font-weight: 700;
+    font-size: 1.05rem;
+  }
+
+  .place-order {
+    width: 100%;
+    margin-top: 18px;
+    background: var(--red);
+    color: #FFF8EC;
+    border: none;
+    font-family: 'Work Sans', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 13px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  .place-order:hover { background: var(--red-dark); }
+
+  footer {
+    text-align: center;
+    font-size: 0.78rem;
+    opacity: 0.55;
+    padding: 6px 16px calc(20px + env(safe-area-inset-bottom, 0px));
+  }
+</style>
+</head>
+
+<body>
+
+  <!-- Signage banner -->
+  <header class="banner">
+    <div class="top-space"></div>
+    <h1 class="wordmark">Tiffin Stop</h1>
+    <p>Street-stall favourites, cooked fresh and sent your way.</p>
+  </header>
+  <div class="scallop" aria-hidden="true"></div>
+
+  <!-- Category tabs -->
+  <nav class="tabs">
+    <button class="tab active" data-category="all" onclick="filterMenu('all')">All</button>
+    <button class="tab" data-category="pizza" onclick="filterMenu('pizza')">Pizza</button>
+    <button class="tab" data-category="burger" onclick="filterMenu('burger')">Burgers</button>
+    <button class="tab" data-category="drink" onclick="filterMenu('drink')">Drinks</button>
+  </nav>
+
+  <!-- Menu -->
+  <main class="menu">
+
+    <article class="food-card" data-category="pizza">
+      <div class="icon-plate">
+        <span class="price-stamp">₹250</span>
+        <svg viewBox="0 0 64 64" fill="none">
+          <path d="M32 6 L58 52 A32 32 0 0 1 6 52 Z" fill="var(--mustard)" stroke="var(--ink)" stroke-width="2.5" stroke-linejoin="round"/>
+          <circle cx="32" cy="26" r="3.4" fill="var(--red)"/>
+          <circle cx="23" cy="36" r="3" fill="var(--red)"/>
+          <circle cx="41" cy="36" r="3" fill="var(--red)"/>
+          <circle cx="32" cy="45" r="2.6" fill="var(--red)"/>
+        </svg>
+      </div>
+      <div class="perforation"></div>
+      <div class="details">
+        <h3>Margherita Pizza</h3>
+        <p class="desc">Cheese pizza with fresh tomato and basil.</p>
+        <button class="add-btn" onclick="addToCart('Margherita Pizza', 250)">Add to plate</button>
+      </div>
+    </article>
+
+    <article class="food-card" data-category="pizza">
+      <div class="icon-plate">
+        <span class="price-stamp">₹300</span>
+        <svg viewBox="0 0 64 64" fill="none">
+          <path d="M32 6 L58 52 A32 32 0 0 1 6 52 Z" fill="var(--mustard)" stroke="var(--ink)" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M14 46 Q32 30 50 46" stroke="#fff8ec" stroke-width="3" fill="none" opacity="0.6"/>
+          <circle cx="32" cy="30" r="3" fill="var(--red)"/>
+          <circle cx="24" cy="40" r="2.6" fill="var(--red)"/>
+          <circle cx="40" cy="40" r="2.6" fill="var(--red)"/>
+        </svg>
+      </div>
+      <div class="perforation"></div>
+      <div class="details">
+        <h3>Cheese Pizza</h3>
+        <p class="desc">Loaded with extra mozzarella, edge to edge.</p>
+        <button class="add-btn" onclick="addToCart('Cheese Pizza', 300)">Add to plate</button>
+      </div>
+    </article>
+
+    <article class="food-card" data-category="burger">
+      <div class="icon-plate">
+        <span class="price-stamp">₹150</span>
+        <svg viewBox="0 0 64 64" fill="none">
+          <path d="M12 26 Q32 8 52 26 Z" fill="var(--mustard)" stroke="var(--ink)" stroke-width="2.5" stroke-linejoin="round"/>
+          <rect x="12" y="27" width="40" height="6" rx="2" fill="var(--teal)" stroke="var(--ink)" stroke-width="2"/>
+          <rect x="12" y="35" width="40" height="7" rx="2" fill="var(--red)" stroke="var(--ink)" stroke-width="2"/>
+          <path d="M12 44 h40 v6 a4 4 0 0 1 -4 4 h-32 a4 4 0 0 1 -4 -4 Z" fill="var(--mustard)" stroke="var(--ink)" stroke-width="2.5"/>
+        </svg>
+      </div>
+      <div class="perforation"></div>
+      <div class="details">
+        <h3>Veg Burger</h3>
+        <p class="desc">A crisp vegetable patty with all the fixings.</p>
+        <button class="add-btn" onclick="addToCart('Veg Burger', 150)">Add to plate</button>
+      </div>
+    </article>
+
+    <article class="food-card" data-category="burger">
+      <div class="icon-plate">
+        <span class="price-stamp">₹180</span>
+        <svg viewBox="0 0 64 64" fill="none">
+          <path d="M12 26 Q32 8 52 26 Z" fill="var(--mustard)" stroke="var(--ink)" stroke-width="2.5" stroke-linejoin="round"/>
+          <rect x="12" y="27" width="40" height="7" rx="2" fill="var(--red)" stroke="var(--ink)" stroke-width="2"/>
+          <rect x="15" y="35" width="34" height="5" rx="2" fill="#F4D35E" stroke="var(--ink)" stroke-width="1.5"/>
+          <path d="M12 41 h40 v9 a4 4 0 0 1 -4 4 h-32 a4 4 0 0 1 -4 -4 Z" fill="var(--mustard)" stroke="var(--ink)" stroke-width="2.5"/>
+        </svg>
+      </div>
+      <div class="perforation"></div>
+      <div class="details">
+        <h3>Cheese Burger</h3>
+        <p class="desc">Beef patty, melted cheese, house sauce.</p>
+        <button class="add-btn" onclick="addToCart('Cheese Burger', 180)">Add to plate</button>
+      </div>
+    </article>
+
+    <article class="food-card" data-category="drink">
+      <div class="icon-plate">
+        <span class="price-stamp">₹80</span>
+        <svg viewBox="0 0 64 64" fill="none">
+          <path d="M20 18 h24 l-3 34 a3 3 0 0 1 -3 3 h-12 a3 3 0 0 1 -3 -3 Z" fill="var(--teal)" stroke="var(--ink)" stroke-width="2.5" stroke-linejoin="round"/>
+          <rect x="18" y="14" width="28" height="6" rx="2" fill="var(--mustard)" stroke="var(--ink)" stroke-width="2"/>
+          <line x1="34" y1="6" x2="30" y2="18" stroke="var(--ink)" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="perforation"></div>
+      <div class="details">
+        <h3>Fresh Juice</h3>
+        <p class="desc">Cold-pressed seasonal fruit, no sugar added.</p>
+        <button class="add-btn" onclick="addToCart('Fresh Juice', 80)">Add to plate</button>
+      </div>
+    </article>
+
+  </main>
+
+  <!-- Cart, styled as a paper receipt -->
+  <div class="receipt-wrap">
+    <div class="receipt">
+      <h2>Your Order</h2>
+      <p class="sub">Tiffin Stop · takeaway slip</p>
+
+      <div id="cartItems"></div>
+
+      <div class="receipt-total">
+        <span>Total</span>
+        <span>₹<span id="total">0</span></span>
+      </div>
+
+      <button class="place-order" onclick="placeOrder()">Place order</button>
+    </div>
+  </div>
+
+  <footer>Tap a tab to filter the menu, then build your plate above.</footer>
+
+  <script>
+    // Everything the customer has picked so far.
+    let cart = [];
+
+    function addToCart(name, price) {
+      const existing = cart.find(item => item.name === name);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ name, price, qty: 1 });
+      }
+      renderCart();
+    }
+
+    function removeFromCart(name) {
+      const item = cart.find(entry => entry.name === name);
+      if (!item) return;
+      item.qty -= 1;
+      if (item.qty <= 0) {
+        cart = cart.filter(entry => entry.name !== name);
+      }
+      renderCart();
+    }
+
+    function renderCart() {
+      const list = document.getElementById('cartItems');
+      const totalField = document.getElementById('total');
+
+      if (cart.length === 0) {
+        list.innerHTML = '<p class="empty-note">Your plate is empty — add something tasty.</p>';
+        totalField.textContent = '0';
+        return;
+      }
+
+      let total = 0;
+
+      list.innerHTML = cart.map(item => {
+        const lineTotal = item.price * item.qty;
+        total += lineTotal;
+        return `
+          <div class="receipt-line">
+            <span class="item-name">${item.name} <span class="qty">×${item.qty}</span></span>
+            <span class="dots"></span>
+            <span class="item-price">₹${lineTotal}</span>
+            <button class="remove-btn" onclick="removeFromCart('${item.name}')" aria-label="Remove one ${item.name}">−</button>
+          </div>
+        `;
+      }).join('');
+
+      totalField.textContent = total;
+    }
+
+    function filterMenu(category) {
+      document.querySelectorAll('.food-card').forEach(card => {
+        card.style.display = (category === 'all' || card.dataset.category === category) ? '' : 'none';
+      });
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.classList.toggle('active', tab.dataset.category === category);
+      });
+    }
+
+    function placeOrder() {
+      if (cart.length === 0) {
+        alert('Add a little something before you check out.');
+        return;
+      }
+      alert('Order placed! Your food is on its way.');
+      cart = [];
+      renderCart();
+    }
+
+    renderCart();
+  </script>
+
+</body>
+</html>
